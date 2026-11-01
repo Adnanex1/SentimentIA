@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>US05 — Tableau de Bord Direction (Fatima-Zahra Tahiri)</title>
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #070a1e; --card: rgba(22, 27, 62, 0.85); --line: rgba(160, 175, 255, 0.16);
+      --tx: #eef3ff; --mut: #95a1d2; --a: #8467ff; --b: #2ce8d5; --bad: #ff5c77; --ok: #34d399;
+    }
+    body { font-family: 'Sora', sans-serif; background: var(--bg); color: var(--tx); margin: 0; padding: 30px; display: grid; place-items: center; min-height: 100vh; }
+    .dash-container { background: var(--card); border: 1px solid var(--line); border-radius: 24px; padding: 36px; width: 100%; max-width: 860px; box-shadow: 0 25px 60px rgba(0,0,0,0.5); backdrop-filter: blur(14px); }
+    .badge { display: inline-block; padding: 4px 12px; border-radius: 99px; background: rgba(132,103,255,0.15); color: var(--a); font-size: 11px; font-weight: 700; margin-bottom: 12px; }
+    .header-row { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 14px; margin-bottom: 24px; }
+    h2 { margin: 0; font-size: 24px; font-weight: 700; }
+    .period-filters { display: flex; gap: 6px; background: rgba(255,255,255,0.05); padding: 4px; border-radius: 12px; border: 1px solid var(--line); }
+    .period-btn { padding: 8px 14px; border-radius: 8px; border: 0; background: none; color: var(--mut); font-size: 12px; font-weight: 600; cursor: pointer; transition: all 0.2s; }
+    .period-btn.active { background: var(--a); color: #fff; }
+    .kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 24px; }
+    .kpi-card { background: rgba(255,255,255,0.03); border: 1px solid var(--line); border-radius: 14px; padding: 16px; text-align: center; }
+    .kpi-val { font-size: 26px; font-weight: 800; }
+    .kpi-lbl { font-size: 12px; color: var(--mut); margin-top: 4px; }
+    .sentiments-bar { height: 16px; border-radius: 99px; display: flex; overflow: hidden; margin-bottom: 24px; }
+    .bar-pos { background: var(--ok); }
+    .bar-neu { background: var(--mut); }
+    .bar-neg { background: var(--bad); }
+    .themes-section { background: rgba(0,0,0,0.2); border-radius: 14px; padding: 18px; border: 1px solid var(--line); }
+    .theme-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 13px; }
+    .theme-row:last-child { border-bottom: 0; }
+  </style>
+</head>
+<body>
+
+  <div class="dash-container">
+    <div class="badge">US05 — Tableau de Bord Synthétique (Fatima-Zahra Tahiri)</div>
+    
+    <div class="header-row">
+      <div>
+        <h2>Tableau de Bord de Satisfaction</h2>
+        <small style="color:var(--mut)">Direction générale · Suivi dynamique de la e-réputation</small>
+      </div>
+
+      <!-- Filtre temporel (Critère 2) -->
+      <div class="period-filters">
+        <button class="period-btn" onclick="selectPeriod('7d', this)">7 jours</button>
+        <button class="period-btn active" onclick="selectPeriod('30d', this)">30 jours</button>
+        <button class="period-btn" onclick="selectPeriod('90d', this)">90 jours</button>
+        <button class="period-btn" onclick="selectPeriod('all', this)">Tout l'historique</button>
+      </div>
+    </div>
+
+    <!-- Affichage nombre d'avis et sentiments (Critère 1) -->
+    <div class="kpi-grid">
+      <div class="kpi-card">
+        <div class="kpi-val" id="kpiTotal">37</div>
+        <div class="kpi-lbl">Avis Analysés</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-val" style="color:var(--ok)" id="kpiSatisfaction">73%</div>
+        <div class="kpi-lbl">Satisfaction Globale</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-val" style="color:var(--ok)" id="kpiPos">27</div>
+        <div class="kpi-lbl">Avis Positifs</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-val" style="color:var(--bad)" id="kpiNeg">10</div>
+        <div class="kpi-lbl">Avis Négatifs</div>
+      </div>
+    </div>
+
+    <!-- Barre visuelle de sentiments -->
+    <div style="font-size:12px;color:var(--mut);margin-bottom:6px">Répartition des sentiments :</div>
+    <div class="sentiments-bar">
+      <div class="bar-pos" id="barPos" style="width:73%"></div>
+      <div class="bar-neu" id="barNeu" style="width:7%"></div>
+      <div class="bar-neg" id="barNeg" style="width:20%"></div>
+    </div>
+
+    <!-- Principaux thèmes (Critère 1) -->
+    <div class="themes-section">
+      <div style="font-size:13.5px;font-weight:700;margin-bottom:10px">Principaux thèmes identifiés sur la période :</div>
+      <div id="themeList">
+        <div class="theme-row"><span>1. Accueil & Service</span><b>29 mentions (78%)</b></div>
+        <div class="theme-row"><span>2. Propreté des chambres</span><b>21 mentions (57%)</b></div>
+        <div class="theme-row"><span>3. Confort & Literie</span><b>18 mentions (49%)</b></div>
+        <div class="theme-row"><span>4. Petit-déjeuner buffet</span><b>12 mentions (32%)</b></div>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    const MOCK_PERIODS = {
+      '7d': { total: 12, sat: '83%', pos: 10, neg: 2, pPos: '83%', pNeu: '0%', pNeg: '17%', themes: ['Accueil & Personnel (10 mentions)', 'Propreté (8 mentions)', 'Confort (5 mentions)'] },
+      '30d': { total: 37, sat: '73%', pos: 27, neg: 10, pPos: '73%', pNeu: '7%', pNeg: '20%', themes: ['Accueil & Service (29 mentions)', 'Propreté des chambres (21 mentions)', 'Confort & Literie (18 mentions)'] },
+      '90d': { total: 87, sat: '69%', pos: 60, neg: 27, pPos: '69%', pNeu: '8%', pNeg: '23%', themes: ['Accueil & Service (64 mentions)', 'Propreté (48 mentions)', 'Restauration (35 mentions)'] },
+      'all': { total: 410, sat: '74%', pos: 303, neg: 107, pPos: '74%', pNeu: '5%', pNeg: '21%', themes: ['Accueil & Réception (320 mentions)', 'Propreté générale (265 mentions)', 'Confort literie (210 mentions)'] }
+    };
+
+    function selectPeriod(periodKey, btn) {
+      document.querySelectorAll('.period-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      const d = MOCK_PERIODS[periodKey];
+      document.getElementById('kpiTotal').innerText = d.total;
+      document.getElementById('kpiSatisfaction').innerText = d.sat;
+      document.getElementById('kpiPos').innerText = d.pos;
+      document.getElementById('kpiNeg').innerText = d.neg;
+
+      document.getElementById('barPos').style.width = d.pPos;
+      document.getElementById('barNeu').style.width = d.pNeu;
+      document.getElementById('barNeg').style.width = d.pNeg;
+
+      document.getElementById('themeList').innerHTML = d.themes.map((th, idx) => `
+        <div class="theme-row"><span>${idx + 1}. ${th.split(' (')[0]}</span><b>${th.split(' (')[1].replace(')', '')}</b></div>
+      `).join('');
+    }
+  </script>
+</body>
+</html>

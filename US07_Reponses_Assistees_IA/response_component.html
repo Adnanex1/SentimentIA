@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>US07 — Réponses Assistées par IA (Sarah Berrada)</title>
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #070a1e; --card: rgba(22, 27, 62, 0.85); --line: rgba(160, 175, 255, 0.16);
+      --tx: #eef3ff; --mut: #95a1d2; --a: #8467ff; --b: #2ce8d5; --bad: #ff5c77; --ok: #34d399;
+    }
+    body { font-family: 'Sora', sans-serif; background: var(--bg); color: var(--tx); margin: 0; padding: 30px; display: grid; place-items: center; min-height: 100vh; }
+    .card { background: var(--card); border: 1px solid var(--line); border-radius: 24px; padding: 36px; width: 100%; max-width: 780px; box-shadow: 0 25px 60px rgba(0,0,0,0.5); backdrop-filter: blur(14px); }
+    .badge { display: inline-block; padding: 4px 12px; border-radius: 99px; background: rgba(132,103,255,0.15); color: var(--a); font-size: 11px; font-weight: 700; margin-bottom: 12px; }
+    h2 { margin: 0 0 8px; font-size: 24px; font-weight: 700; }
+    p.sub { color: var(--mut); font-size: 13.5px; margin-bottom: 24px; line-height: 1.5; }
+    .review-box { background: rgba(255,255,255,0.03); border: 1px solid var(--line); border-radius: 14px; padding: 18px; margin-bottom: 20px; }
+    textarea { width: 100%; min-height: 140px; padding: 14px; border-radius: 14px; border: 1px solid var(--line); background: rgba(0,0,0,0.3); color: #fff; font-size: 13.5px; line-height: 1.6; box-sizing: border-box; font-family: inherit; resize: vertical; }
+    textarea:focus { outline: 2px solid var(--b); }
+    .btn-row { display: flex; gap: 10px; margin-top: 14px; flex-wrap: wrap; }
+    .btn { padding: 12px 20px; border-radius: 10px; border: 0; cursor: pointer; font-weight: 700; font-size: 13px; transition: transform 0.2s; }
+    .btn:hover { transform: translateY(-2px); }
+    .btn-gen { background: linear-gradient(120deg, var(--a), var(--b)); color: #fff; }
+    .btn-pub { background: var(--ok); color: #070a1e; }
+    .btn-rej { background: rgba(255, 92, 119, 0.15); border: 1px solid var(--bad); color: var(--bad); }
+    .status-badge { display: inline-block; margin-top: 16px; padding: 8px 14px; border-radius: 8px; font-size: 12.5px; font-weight: 600; }
+  </style>
+</head>
+<body>
+
+  <div class="card">
+    <div class="badge">US07 — Réponses Assistées par IA (Sarah Berrada)</div>
+    <h2>Assistant IA de Réponse aux Avis</h2>
+    <p class="sub">Générez une proposition sur-mesure tenant compte des points forts et faiblesses. Le responsable garde le contrôle total pour modifier, refuser ou valider la publication.</p>
+
+    <!-- Avis source -->
+    <div class="review-box">
+      <div style="font-size:12px;color:var(--mut);margin-bottom:6px"><b>Avis Client #105</b> · Reçu sur Booking.com</div>
+      <div style="font-size:14px;font-style:italic">"Chambre très propre et accueil formidable, mais nous avons trouvé le prix du repas un peu excessif."</div>
+      <div style="margin-top:8px;font-size:12px">
+        <span style="color:var(--ok)">✔ Points appréciés : Propreté, Accueil</span> &nbsp;|&nbsp;
+        <span style="color:var(--bad)">✖ Point négatif : Tarif restauration</span>
+      </div>
+    </div>
+
+    <!-- Proposition IA générée -->
+    <div>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+        <label style="font-size:13px;font-weight:700">Proposition de réponse générée par l'IA :</label>
+        <button class="btn btn-gen" onclick="generateAiDraft()">⚡ Régénérer proposition</button>
+      </div>
+      <textarea id="replyText">Bonjour,
+
+Nous vous remercions chaleureusement pour votre avis suite à votre séjour au Riad UEMF Fès. Nous sommes ravis que vous ayez apprécié notre propreté et l'accueil formidable de notre équipe. Concernant le tarif du repas, nous prenons note de votre remarque afin d'ajuster nos formules.
+
+Au plaisir de vous accueillir de nouveau prochainement.
+Bien cordialement,
+La direction</textarea>
+    </div>
+
+    <div class="btn-row">
+      <!-- Validation humaine obligatoire (Critère 3) -->
+      <button class="btn btn-pub" onclick="validateAndPublish()">✔ Valider & Publier la réponse</button>
+      <!-- Refus possible (Critère 2) -->
+      <button class="btn btn-rej" onclick="rejectProposal()">✖ Refuser la proposition</button>
+    </div>
+
+    <div id="statusAlert" style="display:none" class="status-badge"></div>
+  </div>
+
+  <script>
+    function generateAiDraft() {
+      const area = document.getElementById('replyText');
+      area.value = "Bonjour,\n\nToute l'équipe du Riad UEMF vous remercie pour vos compliments sur la propreté et notre accueil chaleureux ! Concernant nos tarifs de restauration, nous travaillons constamment pour vous offrir le meilleur rapport qualité-prix.\n\nÀ très bientôt parmi nous,\nLa direction";
+      showAlert("Nouvelle proposition IA générée en tenant compte de l'avis !", "rgba(44,232,213,0.15)", "var(--b)");
+    }
+
+    function validateAndPublish() {
+      const text = document.getElementById('replyText').value.trim();
+      showAlert("✔ Validé par le responsable ! La réponse a été publiée avec succès.", "rgba(52,211,153,0.15)", "var(--ok)");
+    }
+
+    function rejectProposal() {
+      document.getElementById('replyText').value = "";
+      showAlert("✖ Proposition d'assistance refusée par le responsable. Aucune publication n'a été effectuée.", "rgba(255,92,119,0.15)", "var(--bad)");
+    }
+
+    function showAlert(msg, bg, color) {
+      const a = document.getElementById('statusAlert');
+      a.style.display = 'block';
+      a.style.background = bg;
+      a.style.color = color;
+      a.innerText = msg;
+    }
+  </script>
+</body>
+</html>

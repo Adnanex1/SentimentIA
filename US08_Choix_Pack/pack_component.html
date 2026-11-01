@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>US08 — Choix d'un Pack & Accès</title>
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #070a1e; --card: rgba(22, 27, 62, 0.85); --line: rgba(160, 175, 255, 0.16);
+      --tx: #eef3ff; --mut: #95a1d2; --a: #8467ff; --b: #2ce8d5; --bad: #ff5c77; --ok: #34d399; --gold: #f59e0b;
+    }
+    body { font-family: 'Sora', sans-serif; background: var(--bg); color: var(--tx); margin: 0; padding: 30px; display: grid; place-items: center; min-height: 100vh; }
+    .container { background: var(--card); border: 1px solid var(--line); border-radius: 24px; padding: 36px; width: 100%; max-width: 900px; box-shadow: 0 25px 60px rgba(0,0,0,0.5); backdrop-filter: blur(14px); }
+    .badge-hdr { display: inline-block; padding: 4px 12px; border-radius: 99px; background: rgba(132,103,255,0.15); color: var(--a); font-size: 11px; font-weight: 700; margin-bottom: 12px; }
+    .top-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 10px; }
+    h2 { margin: 0; font-size: 24px; font-weight: 700; }
+    
+    /* Badge du pack actif (Critère 2) */
+    .active-pill { display: inline-flex; align-items: center; gap: 8px; padding: 6px 14px; border-radius: 99px; font-size: 12px; font-weight: 700; background: rgba(132,103,255,0.2); border: 1px solid var(--a); color: #fff; }
+    
+    /* Grille des 3 packs (Critère 1) */
+    .packs-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 14px; }
+    .pack-card { background: rgba(255,255,255,0.03); border: 1px solid var(--line); border-radius: 18px; padding: 22px; position: relative; display: flex; flex-direction: column; transition: all 0.3s; }
+    .pack-card.active { border-color: var(--a); background: rgba(132,103,255,0.08); box-shadow: 0 10px 30px rgba(132,103,255,0.2); }
+    .pack-card:hover { transform: translateY(-3px); }
+    .p-title { font-size: 18px; font-weight: 700; margin-bottom: 6px; }
+    .p-price { font-size: 22px; font-weight: 800; color: var(--b); margin-bottom: 12px; }
+    .p-feat-list { list-style: none; padding: 0; margin: 0 0 20px; font-size: 12.5px; line-height: 1.8; color: var(--mut); flex: 1; }
+    .p-feat-list li::before { content: "✔ "; color: var(--ok); }
+    .p-feat-list li.off { opacity: 0.4; }
+    .p-feat-list li.off::before { content: "✖ "; color: var(--bad); }
+    .btn-pack { width: 100%; padding: 12px; border-radius: 10px; border: 0; background: rgba(255,255,255,0.08); color: #fff; font-weight: 700; font-size: 12.5px; cursor: pointer; transition: all 0.2s; }
+    .btn-pack.btn-active { background: var(--a); cursor: default; }
+    .btn-pack:not(.btn-active):hover { background: linear-gradient(120deg, var(--a), var(--b)); }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <div class="badge-hdr">US08 — Choix d'un Pack & Droits d'Accès </div>
+    
+    <div class="top-bar">
+      <div>
+        <h2>Formules d'Abonnement sentimentIA</h2>
+        <small style="color:var(--mut)">Sélectionnez la formule adaptée à vos besoins pour débloquer les accès correspondants.</small>
+      </div>
+
+      <!-- Pack actif visible (Critère 2) -->
+      <div class="active-pill" id="activePackBadge">
+        <span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--ok)"></span>
+        Pack Actif : Pack Pro (1 190 DH / mois)
+      </div>
+    </div>
+
+    <!-- Affichage des 3 packs, prix et fonctionnalités (Critère 1) -->
+    <div class="packs-grid">
+      
+      <!-- 1. Pack Essentiel -->
+      <div class="pack-card" id="card-essentiel">
+        <div class="p-title">Pack Essentiel</div>
+        <div class="p-price">490 DH <small style="font-size:12px;color:var(--mut)">/ mois</small></div>
+        <ul class="p-feat-list">
+          <li>Jusqu'à 500 avis/mois</li>
+          <li>Analyse des sentiments de base</li>
+          <li>Tableau de bord synthétique</li>
+          <li class="off">Copilot IA conversationnel</li>
+          <li class="off">Rapports PDF exécutifs</li>
+          <li class="off">Multi-établissements</li>
+        </ul>
+        <button class="btn-pack" onclick="switchPack('essentiel')">Choisir Essentiel</button>
+      </div>
+
+      <!-- 2. Pack Pro (Actif par défaut) -->
+      <div class="pack-card active" id="card-pro">
+        <div style="position:absolute;top:10px;right:14px;background:var(--a);color:#fff;font-size:10px;padding:2px 8px;border-radius:99px;font-weight:700">ACTIF</div>
+        <div class="p-title">Pack Pro 👑</div>
+        <div class="p-price">1 190 DH <small style="font-size:12px;color:var(--mut)">/ mois</small></div>
+        <ul class="p-feat-list">
+          <li>Volume d'avis illimité</li>
+          <li>Analyse thématique complète</li>
+          <li>Copilot IA avec preuves textuelles</li>
+          <li>Générateur de rapports PDF</li>
+          <li>Réponses assistées par IA (3 langues)</li>
+          <li class="off">Multi-établissements</li>
+        </ul>
+        <button class="btn-pack btn-active" id="btn-pro">Pack Actif</button>
+      </div>
+
+      <!-- 3. Pack Multi-établissements -->
+      <div class="pack-card" id="card-multi">
+        <div class="p-title">Multi-établissements 🏢</div>
+        <div class="p-price">2 490 DH <small style="font-size:12px;color:var(--mut)">/ mois</small></div>
+        <ul class="p-feat-list">
+          <li>Gestion illimitée de tous vos riads</li>
+          <li>Toutes les fonctionnalités Pro</li>
+          <li>Reporting consolidé groupe</li>
+          <li>Gestion multi-utilisateurs & rôles</li>
+          <li>Accompagnement IA personnalisé</li>
+          <li>Support dédié 24/7</li>
+        </ul>
+        <button class="btn-pack" onclick="switchPack('multi')">Choisir Multi</button>
+      </div>
+
+    </div>
+
+    <!-- Test des contrôles d'accès (Critère 3) -->
+    <div style="margin-top:24px;padding:16px;border-radius:12px;background:rgba(0,0,0,0.25);border:1px solid var(--line);font-size:13px">
+      <b>Contrôle des accès selon le pack :</b>
+      <div style="margin-top:8px;display:flex;gap:10px;flex-wrap:wrap">
+        <button class="btn-pack" style="width:auto" onclick="testAccess('pdf_executive_reports')">Tester accès aux Rapports PDF</button>
+        <button class="btn-pack" style="width:auto" onclick="testAccess('multi_establishment_access')">Tester accès au Multi-établissements</button>
+      </div>
+      <div id="accessResult" style="margin-top:10px;color:var(--mut)"></div>
+    </div>
+  </div>
+
+  <script>
+    let currentPack = 'pro';
+
+    function switchPack(packKey) {
+      currentPack = packKey;
+      document.querySelectorAll('.pack-card').forEach(c => c.classList.remove('active'));
+      document.querySelectorAll('.btn-pack').forEach(b => {
+        b.classList.remove('btn-active');
+        b.innerText = 'Choisir';
+      });
+
+      const card = document.getElementById(`card-${packKey}`);
+      card.classList.add('active');
+      const btn = card.querySelector('button');
+      btn.classList.add('btn-active');
+      btn.innerText = 'Pack Actif';
+
+      const labels = {
+        'essentiel': 'Pack Actif : Pack Essentiel (490 DH / mois)',
+        'pro': 'Pack Actif : Pack Pro (1 190 DH / mois)',
+        'multi': 'Pack Actif : Multi-établissements (2 490 DH / mois)'
+      };
+      document.getElementById('activePackBadge').innerHTML = `
+        <span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--ok)"></span>
+        ${labels[packKey]}
+      `;
+      alert(`Pack basculé vers : ${labels[packKey]}`);
+    }
+
+    function testAccess(feature) {
+      const res = document.getElementById('accessResult');
+      if (feature === 'pdf_executive_reports') {
+        if (currentPack === 'essentiel') {
+          res.innerHTML = '<span style="color:var(--bad)">✖ Accès refusé : Le module Rapports PDF nécessite le Pack Pro.</span>';
+        } else {
+          res.innerHTML = '<span style="color:var(--ok)">✔ Accès autorisé : Le module Rapports PDF est inclus dans votre formule !</span>';
+        }
+      } else if (feature === 'multi_establishment_access') {
+        if (currentPack === 'multi') {
+          res.innerHTML = '<span style="color:var(--ok)">✔ Accès autorisé : Gestion multi-établissements active !</span>';
+        } else {
+          res.innerHTML = '<span style="color:var(--bad)">✖ Accès refusé : La gestion de plusieurs hôtels nécessite le Pack Multi-établissements.</span>';
+        }
+      }
+    }
+  </script>
+</body>
+</html>

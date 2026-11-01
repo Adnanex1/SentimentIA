@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>US06 — Rapport PDF Exécutif (Omar Alaoui)</title>
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #070a1e; --card: rgba(22, 27, 62, 0.85); --line: rgba(160, 175, 255, 0.16);
+      --tx: #eef3ff; --mut: #95a1d2; --a: #8467ff; --b: #2ce8d5; --bad: #ff5c77; --ok: #34d399;
+    }
+    body { font-family: 'Sora', sans-serif; background: var(--bg); color: var(--tx); margin: 0; padding: 30px; display: grid; place-items: center; min-height: 100vh; }
+    .card { background: var(--card); border: 1px solid var(--line); border-radius: 24px; padding: 36px; width: 100%; max-width: 820px; box-shadow: 0 25px 60px rgba(0,0,0,0.5); backdrop-filter: blur(14px); }
+    .badge { display: inline-block; padding: 4px 12px; border-radius: 99px; background: rgba(132,103,255,0.15); color: var(--a); font-size: 11px; font-weight: 700; margin-bottom: 12px; }
+    h2 { margin: 0 0 8px; font-size: 24px; font-weight: 700; }
+    p.sub { color: var(--mut); font-size: 13.5px; margin-bottom: 24px; line-height: 1.5; }
+    .btn { padding: 12px 24px; border-radius: 999px; border: 0; background: linear-gradient(120deg, var(--a), var(--b)); color: #fff; font-weight: 700; font-size: 13.5px; cursor: pointer; transition: transform 0.2s; display: inline-flex; align-items: center; gap: 8px; }
+    .btn:hover { transform: translateY(-2px); }
+    .btn-ghost { background: transparent; border: 1px solid var(--line); color: var(--tx); }
+    .preview-box { margin-top: 24px; background: #fff; color: #1a1a2e; border-radius: 14px; padding: 24px; font-size: 13px; line-height: 1.6; display: none; }
+    .preview-head { border-bottom: 2px solid var(--a); padding-bottom: 12px; margin-bottom: 16px; font-weight: bold; font-size: 18px; }
+    .progress-bar { height: 6px; background: rgba(255,255,255,0.1); border-radius: 99px; overflow: hidden; margin-top: 14px; display: none; }
+    .progress-fill { height: 100%; width: 0%; background: linear-gradient(90deg, var(--a), var(--b)); transition: width 0.4s; }
+  </style>
+</head>
+<body>
+
+  <div class="card">
+    <div class="badge">US06 — Rapport PDF Exécutif (Omar Alaoui)</div>
+    <h2>Génération & Téléchargement du Rapport</h2>
+    <p class="sub">Générez un rapport exécutif certifié pour votre équipe : période, synthèse des chiffres, points forts et faiblesses étayés par des exemples.</p>
+
+    <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap">
+      <button class="btn" id="btnGen" onclick="generatePdf()">📄 Générer le rapport PDF</button>
+      <button class="btn btn-ghost" id="btnDl" style="display:none" onclick="downloadPdf()">⬇ Télécharger le PDF (Rapport_Riad_UEMF.pdf)</button>
+    </div>
+
+    <div class="progress-bar" id="pBar">
+      <div class="progress-fill" id="pFill"></div>
+    </div>
+
+    <div class="preview-box" id="prevBox">
+      <div class="preview-head">Aperçu du Rapport — Riad UEMF Fès</div>
+      <div><b>Période couverte :</b> Du 01/10/2026 au 30/10/2026 (30 jours)</div>
+      <div><b>Concordance Dashboard :</b> 37 avis analysés · Satisfaction globale 73% (27 positifs, 10 négatifs)</div>
+      <hr style="margin:12px 0;border:0;border-top:1px solid #ddd">
+      <div><b>✔ Point Fort Clé :</b> Accueil & Hospitalité (93% d'avis positifs)</div>
+      <div style="font-style:italic;color:#555;padding-left:10px;border-left:3px solid #10b981">Exemple client : "Accueil irréprochable et personnel aux petits soins dès notre arrivée au riad."</div>
+      <div style="margin-top:10px"><b>✖ Problème à traiter :</b> Bruit nocturne (68% d'insatisfaction)</div>
+      <div style="font-style:italic;color:#555;padding-left:10px;border-left:3px solid #ef4444">Exemple client : "Bruit tard le soir venant de la ruelle, isolation des fenêtres à revoir."</div>
+    </div>
+  </div>
+
+  <script>
+    function generatePdf() {
+      const pBar = document.getElementById('pBar');
+      const pFill = document.getElementById('pFill');
+      const btnDl = document.getElementById('btnDl');
+      const prev = document.getElementById('prevBox');
+
+      pBar.style.display = 'block';
+      pFill.style.width = '30%';
+
+      setTimeout(() => { pFill.style.width = '75%'; }, 300);
+      setTimeout(() => {
+        pFill.style.width = '100%';
+        btnDl.style.display = 'inline-flex';
+        prev.style.display = 'block';
+        alert('Rapport PDF généré avec succès ! Le document est lisible et prêt pour téléchargement.');
+      }, 700);
+    }
+
+    function downloadPdf() {
+      // Déclenchement du téléchargement simulé
+      const blob = new Blob(["%PDF-1.4 Rapport Executif sentimentIA"], { type: "application/pdf" });
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(blob);
+      link.download = "Rapport_Executif_Riad_UEMF_sentimentIA.pdf";
+      link.click();
+    }
+  </script>
+</body>
+</html>

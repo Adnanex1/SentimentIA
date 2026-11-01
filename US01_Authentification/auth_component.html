@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>US01 — Composant Authentification & Isolation</title>
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #070a1e; --card: rgba(22, 27, 62, 0.85); --line: rgba(160, 175, 255, 0.16);
+      --tx: #eef3ff; --mut: #95a1d2; --a: #8467ff; --b: #2ce8d5; --bad: #ff5c77; --ok: #34d399;
+    }
+    body { font-family: 'Sora', sans-serif; background: var(--bg); color: var(--tx); margin: 0; padding: 30px; display: grid; place-items: center; min-height: 100vh; }
+    .auth-card { background: var(--card); border: 1px solid var(--line); border-radius: 24px; padding: 36px; width: 100%; max-width: 480px; box-shadow: 0 25px 60px rgba(0,0,0,0.5); backdrop-filter: blur(14px); }
+    .badge { display: inline-block; padding: 4px 12px; border-radius: 99px; background: rgba(132,103,255,0.15); color: var(--a); font-size: 11px; font-weight: 700; margin-bottom: 12px; }
+    h2 { margin: 0 0 8px; font-size: 24px; font-weight: 700; }
+    p.sub { color: var(--mut); font-size: 13.5px; margin-bottom: 24px; line-height: 1.5; }
+    .field { margin-bottom: 16px; }
+    label { display: block; font-size: 12.5px; font-weight: 600; margin-bottom: 6px; color: var(--tx); }
+    input { width: 100%; padding: 12px 14px; border-radius: 12px; border: 1px solid var(--line); background: rgba(255,255,255,0.05); color: #fff; font-size: 14px; box-sizing: border-box; }
+    input:focus { outline: 2px solid var(--b); border-color: transparent; }
+    .btn { width: 100%; padding: 14px; border-radius: 12px; border: 0; background: linear-gradient(120deg, var(--a), var(--b)); color: #fff; font-weight: 700; font-size: 14px; cursor: pointer; transition: transform 0.2s; margin-top: 10px; }
+    .btn:hover { transform: translateY(-2px); }
+    .msg-box { margin-top: 18px; padding: 14px; border-radius: 12px; font-size: 13px; display: none; line-height: 1.5; }
+    .msg-error { background: rgba(255, 92, 119, 0.15); border: 1px solid var(--bad); color: var(--bad); }
+    .msg-success { background: rgba(52, 211, 153, 0.15); border: 1px solid var(--ok); color: var(--ok); }
+    .demo-users { margin-top: 24px; padding-top: 18px; border-top: 1px solid var(--line); font-size: 12px; color: var(--mut); }
+    .demo-chips { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
+    .chip { padding: 6px 10px; border-radius: 8px; border: 1px solid var(--line); background: rgba(255,255,255,0.03); color: var(--tx); cursor: pointer; font-size: 11.5px; }
+    .chip:hover { border-color: var(--a); }
+  </style>
+</head>
+<body>
+
+  <div class="auth-card">
+    <div class="badge">US01 — Authentification</div>
+    <h2>Connexion Responsable</h2>
+    <p class="sub">Connectez-vous pour accéder exclusivement aux données de votre établissement.</p>
+
+    <form id="authForm">
+      <div class="field">
+        <label for="loginEmail">Email / Identifiant</label>
+        <input type="email" id="loginEmail" placeholder="karim.alami@riad-uemf.ma" required>
+      </div>
+      <div class="field">
+        <label for="loginPassword">Mot de passe</label>
+        <input type="password" id="loginPassword" placeholder="••••••••••••" required>
+      </div>
+      <button type="submit" class="btn">Se connecter à mon établissement</button>
+    </form>
+
+    <div id="statusBox" class="msg-box"></div>
+
+    <div class="demo-users">
+      <b>Comptes de test (cliquez pour remplir) :</b>
+      <div class="demo-chips">
+        <span class="chip" onclick="fillForm('karim.alami@riad-uemf.ma', 'RiadUemf2026!')">🔑 Riad UEMF Fès</span>
+        <span class="chip" onclick="fillForm('mehdi.tazi@atlasbudget.ma', 'AtlasPass2026!')">🔑 Atlas Budget Hotel</span>
+        <span class="chip" onclick="fillForm('erreur@test.com', 'FauxMotDePasse')">❌ Test Identifiants Invalides</span>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function fillForm(email, pwd) {
+      document.getElementById('loginEmail').value = email;
+      document.getElementById('loginPassword').value = pwd;
+    }
+
+    document.getElementById('authForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const email = document.getElementById('loginEmail').value.trim();
+      const pwd = document.getElementById('loginPassword').value;
+      const box = document.getElementById('statusBox');
+
+      // Simulation de l'API auth_manager
+      if (email === 'karim.alami@riad-uemf.ma' && pwd === 'RiadUemf2026!') {
+        box.className = 'msg-box msg-success';
+        box.style.display = 'block';
+        box.innerHTML = '<b>Connexion réussie !</b><br>Bienvenue M. Karim Alami (Riad UEMF Fès). Vos données sont chargées de manière isolée.';
+      } else if (email === 'mehdi.tazi@atlasbudget.ma' && pwd === 'AtlasPass2026!') {
+        box.className = 'msg-box msg-success';
+        box.style.display = 'block';
+        box.innerHTML = '<b>Connexion réussie !</b><br>Bienvenue M. Mehdi Tazi (Atlas Budget Hotel).';
+      } else {
+        box.className = 'msg-box msg-error';
+        box.style.display = 'block';
+        box.innerHTML = '<b>Échec de connexion</b><br>Identifiants invalides. Un message d\'erreur apparaît et l\'accès aux données reste bloqué.';
+      }
+    });
+  </script>
+</body>
+</html>

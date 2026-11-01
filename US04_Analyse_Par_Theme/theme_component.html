@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>US04 — Analyse par Thème (Mehdi Chraibi)</title>
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #070a1e; --card: rgba(22, 27, 62, 0.85); --line: rgba(160, 175, 255, 0.16);
+      --tx: #eef3ff; --mut: #95a1d2; --a: #8467ff; --b: #2ce8d5; --bad: #ff5c77; --ok: #34d399;
+    }
+    body { font-family: 'Sora', sans-serif; background: var(--bg); color: var(--tx); margin: 0; padding: 30px; display: grid; place-items: center; min-height: 100vh; }
+    .card { background: var(--card); border: 1px solid var(--line); border-radius: 24px; padding: 36px; width: 100%; max-width: 820px; box-shadow: 0 25px 60px rgba(0,0,0,0.5); backdrop-filter: blur(14px); }
+    .badge-header { display: inline-block; padding: 4px 12px; border-radius: 99px; background: rgba(44,232,213,0.15); color: var(--b); font-size: 11px; font-weight: 700; margin-bottom: 12px; }
+    h2 { margin: 0 0 8px; font-size: 24px; font-weight: 700; }
+    p.sub { color: var(--mut); font-size: 13.5px; margin-bottom: 24px; line-height: 1.5; }
+    .theme-card { background: rgba(255,255,255,0.03); border: 1px solid var(--line); border-radius: 16px; padding: 20px; margin-bottom: 18px; }
+    .tags { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px; }
+    .tag { display: inline-flex; align-items: center; gap: 6px; padding: 5px 12px; border-radius: 99px; font-size: 12px; font-weight: 700; }
+    .tag.pos { background: rgba(52, 211, 153, 0.14); color: var(--ok); border: 1px solid var(--ok); }
+    .tag.neg { background: rgba(255, 92, 119, 0.14); color: var(--bad); border: 1px solid var(--bad); }
+    .excerpt-box { margin-top: 10px; padding: 12px 14px; border-radius: 10px; background: rgba(0,0,0,0.25); border-left: 3px solid; font-size: 13px; line-height: 1.6; }
+    .ex-pos { border-left-color: var(--ok); }
+    .ex-neg { border-left-color: var(--bad); }
+    .hl-pos { background: rgba(52, 211, 153, 0.2); color: #fff; padding: 2px 4px; border-radius: 4px; font-weight: 600; }
+    .hl-neg { background: rgba(255, 92, 119, 0.2); color: #fff; padding: 2px 4px; border-radius: 4px; font-weight: 600; }
+  </style>
+</head>
+<body>
+
+  <div class="card">
+    <div class="badge-header">US04 — Analyse par Thème (Mehdi Chraibi)</div>
+    <h2>Identification des Thèmes & Extraits Justificatifs</h2>
+    <p class="sub">Reconnaissance de la Propreté, Accueil et Confort. Un avis peut exprimer simultanément des sentiments opposés selon les thèmes.</p>
+
+    <!-- Exemple d'avis multi-thèmes avec sentiments opposés -->
+    <div class="theme-card">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+        <b>Avis Client #204 (Séjour en Riad)</b>
+        <small style="color:var(--mut)">3 thèmes identifiés</small>
+      </div>
+      <p style="font-size:14px;color:var(--tx);margin-bottom:14px">
+        <i>"L'accueil du personnel à la réception était extrêmement chaleureux et attentionné. En revanche, la propreté de la salle de bain laissait à désirer, et le confort du matelas était très dur."</i>
+      </p>
+
+      <div class="tags">
+        <span class="tag pos">✔ Accueil & Personnel : Positif</span>
+        <span class="tag neg">✖ Propreté : Négatif</span>
+        <span class="tag neg">✖ Confort : Négatif</span>
+      </div>
+
+      <div class="excerpt-box ex-pos">
+        <b>Extrait Accueil (+):</b> <span class="hl-pos">"L'accueil du personnel à la réception était extrêmement chaleureux et attentionné."</span>
+      </div>
+      <div class="excerpt-box ex-neg">
+        <b>Extrait Propreté (-):</b> <span class="hl-neg">"En revanche, la propreté de la salle de bain laissait à désirer"</span>
+      </div>
+      <div class="excerpt-box ex-neg">
+        <b>Extrait Confort (-):</b> <span class="hl-neg">"le confort du matelas était très dur."</span>
+      </div>
+    </div>
+
+  </div>
+
+</body>
+</html>
